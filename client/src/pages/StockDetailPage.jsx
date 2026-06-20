@@ -4,7 +4,6 @@ import API from '../api/axios';
 import StockChart from '../components/stocks/StockChart';
 import TradeForm from '../components/trade/TradeForm';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { useAuth } from '../hooks/useAuth';
 import { FaArrowLeft, FaArrowUp, FaArrowDown, FaBuilding } from 'react-icons/fa';
 
 const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n || 0);
@@ -24,7 +23,6 @@ const fmtVol = (n) => {
 export default function StockDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { refreshUser } = useAuth();
   const [stock, setStock] = useState(null);
   const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,7 +46,7 @@ export default function StockDetailPage() {
 
   const handleTradeComplete = async () => {
     await fetchData();
-    await refreshUser();
+
   };
 
   if (loading) return <LoadingSpinner />;

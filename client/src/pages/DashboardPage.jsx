@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import API from '../api/axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -13,7 +12,6 @@ const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency:
 const fmtPct = (n) => `${n >= 0 ? '+' : ''}${Number(n || 0).toFixed(2)}%`;
 
 export default function DashboardPage() {
-  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [portfolio, setPortfolio] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -38,7 +36,7 @@ export default function DashboardPage() {
       }
     };
     fetchAll();
-    refreshUser();
+
   }, []);
 
   if (loading) return <LoadingSpinner />;
@@ -63,7 +61,7 @@ export default function DashboardPage() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Welcome back, {user?.name?.split(' ')[0]}! 👋</h1>
+          <h1 className="page-title">Dashboard 📊</h1>
           <p className="page-subtitle">Here's your trading overview</p>
         </div>
         <button className="btn-secondary" onClick={() => navigate('/market')}>

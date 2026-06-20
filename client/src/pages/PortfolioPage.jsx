@@ -4,13 +4,11 @@ import API from '../api/axios';
 import HoldingsTable from '../components/portfolio/HoldingsTable';
 import ProfitLossChart from '../components/portfolio/ProfitLossChart';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { useAuth } from '../hooks/useAuth';
+
 import { FaChartPie, FaArrowUp, FaArrowDown, FaWallet, FaChartLine } from 'react-icons/fa';
 
 const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n || 0);
-
 export default function PortfolioPage() {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,7 +51,7 @@ export default function PortfolioPage() {
     },
     {
       label: 'Cash Balance',
-      value: fmt(user?.virtualBalance),
+      value: 'N/A',
       icon: <FaWallet />,
       color: 'var(--accent)',
     },

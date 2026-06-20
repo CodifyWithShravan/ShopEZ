@@ -8,11 +8,8 @@ const {
   getTopLosers,
   getSectors,
 } = require('../controllers/stockController');
-const auth = require('../middleware/auth');
 
-// All routes require authentication
-router.use(auth);
-
+// No auth required - public routes
 router.get('/', getAllStocks);
 router.get('/search', searchStocks);
 router.get('/top-gainers', getTopGainers);

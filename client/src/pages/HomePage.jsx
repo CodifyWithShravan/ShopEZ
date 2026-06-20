@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import API from '../api/axios';
 import { FaChartLine, FaShieldAlt, FaBriefcase, FaArrowUp, FaArrowDown, FaRocket, FaTrophy } from 'react-icons/fa';
 
@@ -34,7 +33,6 @@ function StatCounter({ end, prefix = '', suffix = '' }) {
 }
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [topGainers, setTopGainers] = useState([]);
   const [topLosers, setTopLosers] = useState([]);
@@ -55,9 +53,9 @@ export default function HomePage() {
         setLoadingMovers(false);
       }
     };
-    if (isAuthenticated) fetchMovers();
+    fetchMovers();
     else setLoadingMovers(false);
-  }, [isAuthenticated]);
+  }, []);
 
   return (
     <div className="home-page">
@@ -76,7 +74,7 @@ export default function HomePage() {
             and master the market — all in one powerful platform.
           </p>
           <div className="hero-cta animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
-            {isAuthenticated ? (
+            {true ? (
               <>
                 <button onClick={() => navigate('/dashboard')} className="btn-primary-hero">
                   Go to Dashboard
@@ -164,7 +162,7 @@ export default function HomePage() {
       </section>
 
       {/* TOP MOVERS */}
-      {isAuthenticated && !loadingMovers && (topGainers.length > 0 || topLosers.length > 0) && (
+      {!loadingMovers && (topGainers.length > 0 || topLosers.length > 0) && (
         <section className="movers-section container">
           <div className="section-header text-center">
             <h2 className="section-title">Today's Top Movers</h2>
@@ -230,7 +228,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA SECTION */}
-      {!isAuthenticated && (
+      {false && (
         <section className="cta-section container text-center">
           <div className="cta-card glass-card">
             <h2 className="cta-title">Ready to Start Trading?</h2>

@@ -5,11 +5,8 @@ const {
   sellStock,
   getTradeHistory,
 } = require('../controllers/tradeController');
-const auth = require('../middleware/auth');
 
-// All routes require authentication
-router.use(auth);
-
+// No auth required
 router.post('/buy', buyStock);
 router.post('/sell', sellStock);
 router.get('/history', getTradeHistory);

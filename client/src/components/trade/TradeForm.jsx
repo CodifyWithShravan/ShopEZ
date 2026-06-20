@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { FaPlus, FaMinus, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import API from '../../api/axios';
-import { useAuth } from '../../context/AuthContext';
 
 const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n || 0);
 
 export default function TradeForm({ stock, holding, onTradeComplete }) {
-  const { user, refreshUser } = useAuth();
   const [tradeType, setTradeType] = useState('BUY');
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -15,7 +13,6 @@ export default function TradeForm({ stock, holding, onTradeComplete }) {
 
   const price         = stock?.currentPrice || 0;
   const totalAmount   = quantity * price;
-  const balance       = user?.virtualBalance || 0;
   const sharesOwned   = holding?.quantity || 0;
 
   // Reset error when switching trade type
@@ -25,8 +22,8 @@ export default function TradeForm({ stock, holding, onTradeComplete }) {
     if (!quantity || quantity <= 0) {
       setError('Quantity must be at least 1'); return false;
     }
-    if (tradeType === 'BUY' && totalAmount > balance) {
-      setError(`Insufficient balance. Need ${fmt(totalAmount)}, have ${fmt(balance)}`); return false;
+    if (tradeType === 'BUY' && totalAmount <= 0) {
+      setError('Invalid trade amount'); return false;
     }
     if (tradeType === 'SELL' && quantity > sharesOwned) {
       setError(`You only own ${sharesOwned} share${sharesOwned !== 1 ? 's' : ''}`); return false;
@@ -49,7 +46,6 @@ export default function TradeForm({ stock, holding, onTradeComplete }) {
         `✅ ${tradeType === 'BUY' ? 'Bought' : 'Sold'} ${quantity} share${quantity > 1 ? 's' : ''} of ${stock.symbol} for ${fmt(totalAmount)}`
       );
       setQuantity(1);
-      if (refreshUser) await refreshUser();
       if (onTradeComplete) await onTradeComplete();
     } catch (err) {
       const msg = err?.response?.data?.message || 'Trade failed. Please try again.';
@@ -128,8 +124,8 @@ export default function TradeForm({ stock, holding, onTradeComplete }) {
           </div>
           {tradeType === 'BUY' ? (
             <div className="trade-info-row">
-              <span className="trade-info-label">Available balance</span>
-              <span className="trade-info-value" style={{ color: 'var(--secondary)' }}>{fmt(balance)}</span>
+              <span className="trade-info-label">Shares to buy</span>
+              <span className="trade-info-value" style={{ color: 'var(--secondary)' }}>{quantity}</span>
             </div>
           ) : (
             <div className="trade-info-row">
