@@ -54,7 +54,6 @@ export default function HomePage() {
       }
     };
     fetchMovers();
-    else setLoadingMovers(false);
   }, []);
 
   return (
