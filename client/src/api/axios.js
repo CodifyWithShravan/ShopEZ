@@ -1,17 +1,20 @@
 import axios from 'axios';
 
-// In production (Vercel), VITE_API_URL points to Render backend.
-// In development, Vite proxy handles /api → localhost:5001
+// Production Render backend URL - fallback if env var not set
+const RENDER_URL = 'https://shopez-api-0ca7.onrender.com';
+
 const baseURL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
-  : '/api';
+  : import.meta.env.PROD
+    ? `${RENDER_URL}/api`
+    : '/api';
 
 const API = axios.create({
   baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  timeout: 30000, // 30s - Render free tier can be slow to wake up
 });
 
 export default API;
