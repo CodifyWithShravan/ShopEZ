@@ -4,8 +4,11 @@ const {
   getPortfolio,
   getPerformance,
 } = require('../controllers/portfolioController');
+const auth = require('../middleware/auth');
 
-// No auth required
+// Protect all routes
+router.use(auth);
+
 router.get('/', getPortfolio);
 router.get('/performance', getPerformance);
 

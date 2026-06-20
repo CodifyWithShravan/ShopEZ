@@ -24,7 +24,7 @@ const StockSearch = ({ onSelect, placeholder = 'Search stocks by name or symbol.
     setLoading(true);
     try {
       const res = await API.get('/stocks/search', { params: { q: searchQuery } });
-      const data = res.data.stocks || res.data || [];
+      const data = res.data.data || res.data.stocks || res.data || [];
       setResults(data.slice(0, 8));
       setIsOpen(data.length > 0);
       setSelectedIndex(-1);

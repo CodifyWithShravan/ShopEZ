@@ -29,14 +29,20 @@ export default function StockDetailPage() {
 
   const fetchData = async () => {
     try {
-      const [sRes, pRes] = await Promise.all([
-        API.get(`/stocks/${id}`),
-        API.get('/portfolio'),
-      ]);
+      // Fetch stock first — this is critical
+      const sRes = await API.get(`/stocks/${id}`);
       setStock(sRes.data.data || sRes.data);
+    } catch (err) {
+      console.error('Stock fetch failed:', err);
+    }
+
+    try {
+      // Fetch portfolio separately — failure here should not break the page
+      const pRes = await API.get('/portfolio');
       setPortfolio(pRes.data.data || pRes.data);
     } catch (err) {
-      console.error(err);
+      // Portfolio unavailable — that's ok, just show empty holdings
+      setPortfolio({ holdings: [] });
     } finally {
       setLoading(false);
     }

@@ -5,8 +5,11 @@ const {
   sellStock,
   getTradeHistory,
 } = require('../controllers/tradeController');
+const auth = require('../middleware/auth');
 
-// No auth required
+// Protect all routes
+router.use(auth);
+
 router.post('/buy', buyStock);
 router.post('/sell', sellStock);
 router.get('/history', getTradeHistory);
