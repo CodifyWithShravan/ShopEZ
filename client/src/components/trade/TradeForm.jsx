@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
-import { FaPlus, FaMinus, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaPlus, FaMinus, FaArrowUp, FaArrowDown, FaLock } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import API from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 
 const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n || 0);
 
 export default function TradeForm({ stock, holding, onTradeComplete }) {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [tradeType, setTradeType] = useState('BUY');
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -162,20 +166,31 @@ export default function TradeForm({ stock, holding, onTradeComplete }) {
         )}
 
         {/* SUBMIT */}
-        <button
-          type="submit"
-          id="trade-submit"
-          disabled={loading || quantity < 1}
-          className={tradeType === 'BUY' ? 'btn-trade-buy' : 'btn-trade-sell'}
-        >
-          {loading ? (
-            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              <span className="spinner-border spinner-border-sm" /> Processing...
-            </span>
-          ) : (
-            `${tradeType === 'BUY' ? '🟢 Buy' : '🔴 Sell'} ${quantity} × ${stock?.symbol}`
-          )}
-        </button>
+        {!isAuthenticated ? (
+          <button
+            type="button"
+            className="btn-trade-buy"
+            onClick={() => navigate('/login')}
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', border: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            <FaLock style={{ marginRight: '8px' }} /> Log in to Trade
+          </button>
+        ) : (
+          <button
+            type="submit"
+            id="trade-submit"
+            disabled={loading || quantity < 1}
+            className={tradeType === 'BUY' ? 'btn-trade-buy' : 'btn-trade-sell'}
+          >
+            {loading ? (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <span className="spinner-border spinner-border-sm" /> Processing...
+              </span>
+            ) : (
+              `${tradeType === 'BUY' ? '🟢 Buy' : '🔴 Sell'} ${quantity} × ${stock?.symbol}`
+            )}
+          </button>
+        )}
       </form>
     </div>
   );
