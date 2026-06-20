@@ -36,10 +36,15 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Clear localStorage and redirect to login if unauthorized
-      localStorage.removeItem('shopez_token');
-      localStorage.removeItem('shopez_user');
-      window.location.href = '/login';
+      // Clear localStorage and redirect if we had a token that is now invalid
+      const token = localStorage.getItem('shopez_token');
+      if (token) {
+        localStorage.removeItem('shopez_token');
+        localStorage.removeItem('shopez_user');
+        window.location.href = '/login';
+      }
+      // Unauthenticated guests should not be redirected globally,
+      // specific components will handle the 401 response if they require auth.
     }
     return Promise.reject(error);
   }

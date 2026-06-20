@@ -9,6 +9,8 @@ import StockDetailPage from './pages/StockDetailPage';
 import PortfolioPage from './pages/PortfolioPage';
 import TransactionHistoryPage from './pages/TransactionHistoryPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/market" element={<MarketPage />} />
           <Route path="/stock/:id" element={<StockDetailPage />} />
