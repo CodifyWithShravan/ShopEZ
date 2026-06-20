@@ -72,9 +72,9 @@ export default function DashboardPage() {
       {/* BALANCE + STATS */}
       <div className="dashboard-stats-grid">
         <div className="balance-card glass-card">
-          <div className="balance-label"><FaWallet className="me-2" /> Available Balance</div>
-          <div className="balance-amount">{fmt(user?.virtualBalance)}</div>
-          <div className="balance-sub">Virtual Trading Funds</div>
+          <div className="balance-label"><FaWallet className="me-2" /> Portfolio Value</div>
+          <div className="balance-amount">{fmt(totalCurrentValue)}</div>
+          <div className="balance-sub">Total Holdings: {holdings.length} stocks</div>
         </div>
 
         {[
